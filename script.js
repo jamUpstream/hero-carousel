@@ -162,14 +162,51 @@ document.addEventListener("visibilitychange", () => {
   });
 })();
 
-/* Subtle parallax on the background (from reference) */
+/* ── Background parallax: mouse on desktop, gyroscope on mobile ─── */
+const PARALLAX = 14; // max px of drift
+
+function setParallax(x, y) {
+  const layer = bg[visibleBg];
+  if (layer) layer.style.translate = `${x}px ${y}px`;
+}
+
 if (!prefersReducedMotion) {
+  // Desktop: follow the cursor
   document.addEventListener("mousemove", (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 14;
-    const y = (e.clientY / window.innerHeight - 0.5) * 14;
-    const layer = bg[visibleBg];
-    if (layer) layer.style.translate = `${x}px ${y}px`;
+    setParallax(
+      (e.clientX / window.innerWidth - 0.5) * PARALLAX,
+      (e.clientY / window.innerHeight - 0.5) * PARALLAX
+    );
   });
+
+  // Mobile: follow device tilt (gyroscope)
+  const onOrientation = (e) => {
+    // gamma: left/right tilt [-90..90], beta: front/back tilt [-180..180]
+    if (e.gamma === null || e.beta === null) return;
+    const x = Math.max(-1, Math.min(1, e.gamma / 35)) * PARALLAX;
+    const y = Math.max(-1, Math.min(1, (e.beta - 45) / 35)) * PARALLAX;
+    setParallax(x, y);
+  };
+
+  const enableGyro = () => window.addEventListener("deviceorientation", onOrientation);
+
+  // iOS 13+ requires permission, granted only from a user gesture.
+  const needsPermission =
+    typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function";
+
+  if (needsPermission) {
+    const requestOnce = () => {
+      DeviceOrientationEvent.requestPermission()
+        .then((state) => { if (state === "granted") enableGyro(); })
+        .catch(() => {});
+      window.removeEventListener("touchend", requestOnce);
+    };
+    // first tap unlocks the sensor (also doubles as the user starting to explore)
+    window.addEventListener("touchend", requestOnce, { once: true });
+  } else if (window.DeviceOrientationEvent) {
+    enableGyro();
+  }
 }
 
 /* ── Init ──────────────────────────────────────────────── */
