@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmos Gallery — Explore Deep Space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section class="hero" aria-roledescription="carousel" aria-label="Deep space hero carousel">
+    <!-- Background layers: crossfade + parallax + Ken Burns -->
+    <div class="hero__stage" aria-hidden="true">
+      <div class="hero__bg hero__bg--a is-visible"></div>
+      <div class="hero__bg hero__bg--b"></div>
+      <div class="hero__vignette"></div>
+      <div class="hero__grain"></div>
+    </div>
+
+    <main class="hero__main">
+      <!-- Copy island -->
+      <header class="hero__copy">
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-rule"></span>
+          <span class="hero__eyebrow-text">COSMOS GALLERY</span>
+        </div>
+        <h1 class="hero__heading">EXPLORE<br>DEEP&nbsp;SPACE</h1>
+        <div class="hero__detail">
+          <h2 class="hero__title" id="slide-title">EMBER NEBULA</h2>
+          <p class="hero__caption" id="slide-caption">
+            Sapphire gas clouds threaded with veins of burning orange.
+          </p>
+        </div>
+      </header>
+
+      <!-- Controls (bottom-left) -->
+      <div class="hero__controls">
+        <div class="hero__arrows">
+          <button class="hero__arrow hero__arrow--ghost" id="prev-btn" type="button" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.75 6.25 9 12l5.75 5.75" /></svg>
+          </button>
+          <button class="hero__arrow hero__arrow--accent" id="next-btn" type="button" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.25 6.25 15 12l-5.75 5.75" /></svg>
+          </button>
+        </div>
+
+        <div class="hero__meta">
+          <div class="hero__progress" id="progress" role="tablist" aria-label="Choose slide"></div>
+          <div class="hero__counter" aria-live="polite">
+            <span id="counter-current">01</span><span class="hero__counter-sep">/</span><span id="counter-total">05</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery strip (bottom-right) -->
+      <div class="hero__strip" id="carousel-cards" role="group" aria-label="Slide previews"></div>
+    </main>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
